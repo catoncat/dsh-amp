@@ -1,0 +1,22 @@
+# Editor and OS noise
+.DS_Store
+*.swp
+*~
+
+# Dependencies and build output (this plugin ships none of its own)
+node_modules/
+dist/
+coverage/
+
+# Credentials, per-machine settings, and run records — NEVER commit these
+.credentials.yaml
+.credentials.yaml.*
+settings.yaml
+settings.yaml.*
+state/
+home/
+
+# Logs and scratch output
+*.log
+*.tmp
+*.out

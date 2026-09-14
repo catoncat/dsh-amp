@@ -1,0 +1,41 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  suite:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20', '22']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      # The plugin ships no dependencies: it resolves @deepseek-ai/dsh-* from the harness install.
+      # Installing the harness globally is therefore the whole setup step, and `test/run.sh`
+      # discovers the resulting node_modules by probing for the packages it actually imports.
+      - name: Install the harness
+        run: npm install -g @deepseek-ai/dsh
+
+      - name: Behaviour suite
+        run: bash test/run.sh
+
+      - name: Every module parses
+        run: for f in lib/*.js; do node --check "$f"; done
+
+      - name: No credentials or run records are tracked
+        run: |
+          if git ls-files | grep -Eq '(^|/)(\.credentials\.yaml|settings\.yaml|state/)'; then
+            echo "::error::a credential, settings, or run-record path is tracked"
+            git ls-files | grep -E '(^|/)(\.credentials\.yaml|settings\.yaml|state/)'
+            exit 1
+          fi

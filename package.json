@@ -1,0 +1,87 @@
+{
+  "name": "dsh-amp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "DeepSeek Harness bundle that runs the local Amp CLI as a subagent provider per Amp mode, plus a steerable long-lived session",
+  "license": "MIT",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-bundle",
+    "subagent",
+    "amp",
+    "ampcode",
+    "agent",
+    "cli"
+  ],
+  "homepage": "https://github.com/catoncat/dsh-amp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/catoncat/dsh-amp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/catoncat/dsh-amp/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./live": {
+      "default": "./lib/live-plugin.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "README.zh.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "bash test/run.sh",
+    "verify": "bash verify.sh",
+    "deploy": "bash deploy.sh"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-llm": "*",
+    "@deepseek-ai/dsh-subagent": "*",
+    "@deepseek-ai/dsh-tools": "*",
+    "@deepseek-ai/schemastery": "*"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-llm": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-subagent": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-tools": {
+      "optional": true
+    },
+    "@deepseek-ai/schemastery": {
+      "optional": true
+    }
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-settings"
+      ],
+      "platform": "web"
+    }
+  }
+}

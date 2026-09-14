@@ -1,0 +1,23 @@
+# dsh-amp — HOST-plane rows.
+#
+# The `subagents` registry is a process singleton: the api-proxy serves its
+# cross-session queries to the browser, and a provider name may only be
+# registered once. The registry and its backends therefore stay in the host
+# composition, and this row adds one more backend to it — exactly the plane the
+# first-party `dsh-subagent-spawn-in-process` and the optional codex/claude-code
+# provider bundles occupy.
+#
+# The row provides no service of its own, so it needs no `isolate` realm here.
+# The matching model-facing tools (`subagent_amp_*`) are AGENT-plane and belong
+# in an agent preset, not in this file.
+#
+# `modes` is the one deployment choice this bundle exposes: each listed mode
+# becomes a provider named `amp-<mode>`. It lives here, next to the row, so
+# adding a mode later is a one-line edit plus a restart — no reinstall. The
+# preset that names the tools must list the SAME modes: a tool row naming an
+# unregistered provider stays silently absent rather than failing the mount.
+- insert:
+    - id: amp
+      name: 'dsh-amp'
+      config:
+        modes: [low, medium]
